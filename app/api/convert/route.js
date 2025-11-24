@@ -1,4 +1,4 @@
-import { mapLettersToMeasures } from "../../../shared/noteMappings";
+import { mapRawMeasuresToDisplay } from "../../../shared/noteMappings";
 
 export async function POST(request) {
   try {
@@ -11,19 +11,45 @@ export async function POST(request) {
       });
     }
 
-    // --- FAKE DATA FOR TESTING (now with sharps) ---
-    // Imagine this is like a real melody that had accidentals.
-    const fakeMeasures = [
-      { number: 1, letters: ["C", "D", "E", "F#"] },
-      { number: 2, letters: ["G", "A", "B", "C"] },
-      { number: 3, letters: ["F", "G#", "A", "B"] },
+    // --- FAKE "REAL-STYLE" DATA ---
+    // Imagine this came from a real scanner (OMR) in the future.
+    // Each note has a pitch like "C4", "F#4", etc.
+    const rawMeasures = [
+      {
+        number: 1,
+        notes: [
+          { pitch: "C4" },
+          { pitch: "D4" },
+          { pitch: "E4" },
+          { pitch: "F#4" },
+        ],
+      },
+      {
+        number: 2,
+        notes: [
+          { pitch: "G4" },
+          { pitch: "A4" },
+          { pitch: "B4" },
+          { pitch: "C5" },
+        ],
+      },
+      {
+        number: 3,
+        notes: [
+          { pitch: "F4" },
+          { pitch: "G#4" },
+          { pitch: "A4" },
+          { pitch: "B4" },
+        ],
+      },
     ];
 
-    const measures = mapLettersToMeasures(fakeMeasures);
+    // Convert to the structure the frontend uses
+    const measures = mapRawMeasuresToDisplay(rawMeasures);
 
     return new Response(
       JSON.stringify({
-        message: "File received (fake notes with sharps)",
+        message: "File received (fake real-style notes)",
         filename: file.name,
         measures,
       }),
