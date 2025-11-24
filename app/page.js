@@ -38,9 +38,9 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main style={{ maxWidth: 900, margin: "0 auto" }}>
       <h1>Note Scanner</h1>
-      <p>Upload your sheet music to convert it into letters.</p>
+      <p>Upload your sheet music to turn it into an easy letter sheet.</p>
 
       {/* Language selector */}
       <div style={{ marginTop: 10 }}>
@@ -67,6 +67,7 @@ export default function Home() {
         </label>
       </div>
 
+      {/* Upload form */}
       <form onSubmit={handleSubmit} style={{ marginTop: 20 }}>
         <input
           type="file"
@@ -84,59 +85,103 @@ export default function Home() {
         </p>
       )}
 
+      {/* “Letter sheet” preview */}
       {result && (
         <section style={{ marginTop: 30 }}>
-          <h2>Preview (fake data for now)</h2>
+          <h2>Letter Sheet (fake data for now)</h2>
           <p>
             <strong>File:</strong> {result.filename}
           </p>
 
-          {result.measures?.map((measure) => (
-            <div key={measure.number} style={{ marginTop: 15 }}>
-              <strong>Measure {measure.number}</strong>
+          <div
+            style={{
+              marginTop: 20,
+              border: "1px solid #ddd",
+              borderRadius: 8,
+              padding: "12px 16px",
+              background: "#fafafa",
+            }}
+          >
+            {result.measures?.map((measure) => (
               <div
+                key={measure.number}
                 style={{
                   display: "flex",
-                  gap: 8,
-                  marginTop: 6,
-                  flexWrap: "wrap",
+                  alignItems: "center",
+                  marginBottom: 12,
                 }}
               >
-                {measure.notes.map((note, idx) => {
-                  const main =
-                    language === "en" ? note.letter : note.solfege;
-                  const secondary =
-                    language === "en" ? note.solfege : note.letter;
+                {/* Measure number on the left, like on a real score */}
+                <div
+                  style={{
+                    width: 70,
+                    fontSize: 12,
+                    color: "#666",
+                    textAlign: "right",
+                    paddingRight: 10,
+                    borderRight: "1px solid #ccc",
+                  }}
+                >
+                  M{measure.number}
+                </div>
 
-                  return (
-                    <div
-                      key={idx}
-                      style={{
-                        border: "1px solid #ccc",
-                        borderRadius: 6,
-                        padding: "6px 10px",
-                        minWidth: 40,
-                        textAlign: "center",
-                      }}
-                    >
-                      <div style={{ fontSize: 18, fontWeight: "bold" }}>
-                        {main}
-                      </div>
+                {/* Notes as boxes in a “bar” */}
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    gap: 8,
+                    paddingLeft: 10,
+                    borderLeft: "2px solid black", // left barline
+                    borderRight: "2px solid black", // right barline
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {measure.notes.map((note, idx) => {
+                    const main =
+                      language === "en" ? note.letter : note.solfege;
+                    const secondary =
+                      language === "en" ? note.solfege : note.letter;
+
+                    return (
                       <div
+                        key={idx}
                         style={{
-                          fontSize: 12,
-                          color: "#555",
-                          marginTop: 2,
+                          border: "1px solid #999",
+                          borderRadius: 6,
+                          padding: "6px 10px",
+                          minWidth: 40,
+                          textAlign: "center",
+                          background: "#fff",
                         }}
                       >
-                        {secondary}
+                        <div
+                          style={{
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          {main}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            color: "#555",
+                            marginTop: 2,
+                          }}
+                        >
+                          {secondary}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
       )}
     </main>
