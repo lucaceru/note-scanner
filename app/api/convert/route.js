@@ -11,17 +11,19 @@ export async function POST(request) {
       });
     }
 
-    // --- FAKE DATA FOR TESTING ---
+    // --- FAKE DATA FOR TESTING (now with sharps) ---
+    // Imagine this is like a real melody that had accidentals.
     const fakeMeasures = [
-      { number: 1, letters: ["C", "D", "E", "F"] },
+      { number: 1, letters: ["C", "D", "E", "F#"] },
       { number: 2, letters: ["G", "A", "B", "C"] },
+      { number: 3, letters: ["F", "G#", "A", "B"] },
     ];
 
     const measures = mapLettersToMeasures(fakeMeasures);
 
     return new Response(
       JSON.stringify({
-        message: "File received (fake notes generated)",
+        message: "File received (fake notes with sharps)",
         filename: file.name,
         measures,
       }),
