@@ -1,3 +1,5 @@
+import { mapLettersToMeasures } from "../../../shared/noteMappings";
+
 export async function POST(request) {
   try {
     const formData = await request.formData();
@@ -10,29 +12,12 @@ export async function POST(request) {
     }
 
     // --- FAKE DATA FOR TESTING ---
-
-    const solfegeMap = {
-      C: "Do",
-      D: "Ré",
-      E: "Mi",
-      F: "Fa",
-      G: "Sol",
-      A: "La",
-      B: "Si",
-    };
-
     const fakeMeasures = [
       { number: 1, letters: ["C", "D", "E", "F"] },
       { number: 2, letters: ["G", "A", "B", "C"] },
     ];
 
-    const measures = fakeMeasures.map((m) => ({
-      number: m.number,
-      notes: m.letters.map((letter) => ({
-        letter,
-        solfege: solfegeMap[letter] || "",
-      })),
-    }));
+    const measures = mapLettersToMeasures(fakeMeasures);
 
     return new Response(
       JSON.stringify({
